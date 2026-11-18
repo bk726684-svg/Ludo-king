@@ -1,0 +1,831 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Ludo King – Official App Download (v8.5.0 APK)</title>
+
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <!-- Google Fonts: Fredoka for Royal Gaming Display & Inter for Clean UI -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600;700&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['Inter', 'sans-serif'],
+            display: ['Fredoka', 'sans-serif'],
+          },
+          colors: {
+            royal: {
+              950: '#090718',
+              900: '#100c2a',
+              800: '#1a1442',
+              700: '#271e5e',
+            },
+            ludo: {
+              red: '#ef4444',
+              green: '#10b981',
+              blue: '#3b82f6',
+              yellow: '#f59e0b',
+              gold: '#fbbf24',
+            }
+          },
+          animation: {
+            'float': 'float 3.8s ease-in-out infinite',
+            'shimmer': 'shimmer 2.4s infinite',
+            'pulse-glow': 'pulseGlow 2.4s infinite',
+          },
+          keyframes: {
+            float: {
+              '0%, 100%': { transform: 'translateY(0px)' },
+              '50%': { transform: 'translateY(-8px)' },
+            },
+            shimmer: {
+              '0%': { transform: 'translateX(-120%)' },
+              '100%': { transform: 'translateX(240%)' },
+            },
+            pulseGlow: {
+              '0%, 100%': {
+                boxShadow: '0 0 24px rgba(251, 191, 36, 0.35), 0 10px 25px -5px rgba(16, 185, 129, 0.45)'
+              },
+              '50%': {
+                boxShadow: '0 0 40px rgba(251, 191, 36, 0.7), 0 14px 34px -5px rgba(16, 185, 129, 0.7)'
+              },
+            }
+          }
+        }
+      }
+    };
+  </script>
+
+  <style>
+    /* Subtle 4-color Ludo board radial glow + geometric grid texture */
+    .ludo-grid-bg {
+      background-image:
+        radial-gradient(circle at 14% 14%, rgba(239, 68, 68, 0.16) 0%, transparent 38%),
+        radial-gradient(circle at 86% 18%, rgba(16, 185, 129, 0.16) 0%, transparent 38%),
+        radial-gradient(circle at 18% 82%, rgba(59, 130, 246, 0.16) 0%, transparent 40%),
+        radial-gradient(circle at 86% 84%, rgba(245, 158, 11, 0.16) 0%, transparent 40%),
+        linear-gradient(to right, rgba(255, 255, 255, 0.035) 1px, transparent 1px),
+        linear-gradient(to bottom, rgba(255, 255, 255, 0.035) 1px, transparent 1px);
+      background-size: 100% 100%, 100% 100%, 100% 100%, 100% 100%, 44px 44px, 44px 44px;
+    }
+
+    /* Tactile 3D Golden-Emerald Primary Download Button */
+    .btn-royal-download {
+      background: linear-gradient(135deg, #fbbf24 0%, #eab308 35%, #10b981 100%);
+      border-bottom: 4px solid #047857;
+      transition: transform 0.15s ease, filter 0.2s ease, border-bottom-width 0.15s ease;
+    }
+    .btn-royal-download:hover {
+      filter: brightness(1.07);
+      transform: translateY(-2px);
+    }
+    .btn-royal-download:active {
+      transform: translateY(2px);
+      border-bottom-width: 1px;
+    }
+
+    /* Royal Metallic Gold Title Gradient */
+    .text-gold-gradient {
+      background: linear-gradient(180deg, #fef08a 0%, #fbbf24 45%, #d97706 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+  </style>
+</head>
+<body class="bg-royal-950 text-white font-sans antialiased ludo-grid-bg overflow-x-hidden pb-24 md:pb-0">
+
+  <!-- =====================================================================
+       ANIMATED DOWNLOAD CONFIRMATION TOAST BANNER
+       ===================================================================== -->
+  <div id="downloadToast"
+       role="status"
+       aria-live="polite"
+       class="fixed top-4 right-4 left-4 md:left-auto md:w-96 z-50 pointer-events-none opacity-0 -translate-y-6 transition-all duration-300 ease-out">
+    <div class="pointer-events-auto bg-royal-900/95 backdrop-blur-xl border border-amber-400/60 rounded-2xl p-4 shadow-2xl shadow-black/70">
+      <div class="flex items-start gap-3.5">
+        <!-- Animated Download Icon Badge -->
+        <div class="w-11 h-11 rounded-xl bg-gradient-to-br from-emerald-500 to-teal-600 flex items-center justify-center shrink-0 shadow-lg shadow-emerald-500/30">
+          <svg class="w-6 h-6 text-white animate-bounce" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M4 16v2a2 2 0 002 2h12a2 2 0 002-2v-2M7 10l5 5m0 0l5-5m-5 5V3" />
+          </svg>
+        </div>
+
+        <div class="flex-1 min-w-0">
+          <div class="flex items-center justify-between gap-2">
+            <p class="text-sm font-bold text-amber-300 truncate">Downloading ludo_king.apk...</p>
+            <button type="button" onclick="hideDownloadToast()" aria-label="Close notification" class="text-slate-400 hover:text-white p-1 rounded-lg">
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+              </svg>
+            </button>
+          </div>
+          <p class="text-xs text-slate-300 mt-0.5">Direct download started! Check your browser downloads (64 MB).</p>
+
+          <!-- Animated Progress Bar -->
+          <div class="w-full h-2 bg-royal-950 rounded-full overflow-hidden mt-2.5 border border-white/10">
+            <div id="downloadProgressBar" class="h-full w-0 bg-gradient-to-r from-amber-400 via-yellow-300 to-emerald-400 rounded-full transition-all duration-300"></div>
+          </div>
+          <div class="flex items-center justify-between mt-1.5 text-[11px] text-slate-400">
+            <span id="downloadStatusText">Connecting to direct server...</span>
+            <button type="button" onclick="triggerAppDownload()" class="text-amber-300 hover:underline font-semibold">Restart Download</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- =====================================================================
+       TOP STICKY HEADER
+       ===================================================================== -->
+  <header class="sticky top-0 z-40 bg-royal-950/85 backdrop-blur-lg border-b border-white/10">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 h-16 flex items-center justify-between">
+      <!-- Brand Logo -->
+      <a href="#" class="flex items-center gap-2.5 group">
+        <div class="w-9 h-9 rounded-xl bg-gradient-to-br from-red-500 via-amber-500 to-emerald-500 p-0.5 shadow-md">
+          <div class="w-full h-full bg-royal-900 rounded-[10px] flex items-center justify-center">
+            <svg class="w-5 h-5 text-amber-400" viewBox="0 0 24 24" fill="currentColor">
+              <path d="M5 16L3 5l5.5 5L12 4l3.5 6L21 5l-2 11H5zm14 3c0 .6-.4 1-1 1H6c-.6 0-1-.4-1-1v-1h14v1z"/>
+            </svg>
+          </div>
+        </div>
+        <span class="font-display font-bold text-xl tracking-wide text-white group-hover:text-amber-300 transition-colors">
+          LUDO <span class="text-amber-400">KING</span>
+        </span>
+      </a>
+
+      <!-- Desktop Anchor Navigation -->
+      <nav class="hidden md:flex items-center gap-7 text-sm font-medium text-slate-300">
+        <a href="#modes" class="hover:text-amber-300 transition-colors">Game Modes</a>
+        <a href="#preview" class="hover:text-amber-300 transition-colors">Dice Preview</a>
+        <a href="#install" class="hover:text-amber-300 transition-colors">How to Install</a>
+      </nav>
+
+      <!-- Header Direct Download Button -->
+      <button type="button"
+              onclick="triggerAppDownload()"
+              class="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-gradient-to-r from-amber-400 to-emerald-500 hover:from-amber-300 hover:to-emerald-400 text-royal-950 font-bold text-xs sm:text-sm shadow-lg shadow-emerald-500/20 active:scale-95 transition-all cursor-pointer">
+        <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M4 16v2a2 2 0 002 2h12a2 2 0 002-2v-2M7 10l5 5m0 0l5-5m-5 5V3" />
+        </svg>
+        <span>Download APK</span>
+      </button>
+    </div>
+  </header>
+
+  <main>
+    <!-- =====================================================================
+         HERO SECTION: CUSTOM 3D GLOSSY SVG LOGO, STATS & PRIMARY DOWNLOAD CTA
+         ===================================================================== -->
+    <section class="relative pt-10 pb-16 sm:pt-16 sm:pb-24 px-4 sm:px-6 overflow-hidden">
+      <!-- Ambient Royal Aura -->
+      <div class="absolute top-12 left-1/2 -translate-x-1/2 w-[340px] sm:w-[660px] h-[340px] sm:h-[420px] bg-gradient-to-tr from-red-500/20 via-amber-500/20 to-emerald-500/20 blur-3xl rounded-full pointer-events-none -z-10"></div>
+
+      <div class="max-w-4xl mx-auto text-center flex flex-col items-center">
+
+        <!-- Custom 3D Glossy SVG Ludo King App Icon with Golden Crown & Red Dice -->
+        <div class="relative mb-6 animate-float">
+          <!-- Outer 4-Color Rim Glow -->
+          <div class="absolute -inset-2 rounded-[34px] bg-gradient-to-tr from-red-500 via-amber-400 to-emerald-500 opacity-80 blur-md"></div>
+
+          <div class="relative w-32 h-32 sm:w-40 sm:h-40 rounded-[30px] overflow-hidden border-2 border-amber-300/90 shadow-2xl bg-royal-900">
+            <svg class="w-full h-full" viewBox="0 0 240 240" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Ludo King 3D App Icon">
+              <defs>
+                <!-- 4-Quadrant Ludo Board Gradients -->
+                <linearGradient id="quadRed" x1="0" y1="0" x2="1" y2="1">
+                  <stop offset="0%" stop-color="#f87171"/>
+                  <stop offset="100%" stop-color="#b91c1c"/>
+                </linearGradient>
+                <linearGradient id="quadGreen" x1="0" y1="0" x2="1" y2="1">
+                  <stop offset="0%" stop-color="#34d399"/>
+                  <stop offset="100%" stop-color="#047857"/>
+                </linearGradient>
+                <linearGradient id="quadBlue" x1="0" y1="0" x2="1" y2="1">
+                  <stop offset="0%" stop-color="#60a5fa"/>
+                  <stop offset="100%" stop-color="#1d4ed8"/>
+                </linearGradient>
+                <linearGradient id="quadYellow" x1="0" y1="0" x2="1" y2="1">
+                  <stop offset="0%" stop-color="#fcd34d"/>
+                  <stop offset="100%" stop-color="#d97706"/>
+                </linearGradient>
+                <!-- 3D Red Glossy Dice Gradient -->
+                <linearGradient id="diceBody" x1="0.15" y1="0" x2="0.85" y2="1">
+                  <stop offset="0%" stop-color="#ff6b6b"/>
+                  <stop offset="45%" stop-color="#dc2626"/>
+                  <stop offset="100%" stop-color="#7f1d1d"/>
+                </linearGradient>
+                <!-- Royal Gold Crown Gradient -->
+                <linearGradient id="crownGold" x1="0" y1="0" x2="1" y2="1">
+                  <stop offset="0%" stop-color="#fef9c3"/>
+                  <stop offset="45%" stop-color="#fbbf24"/>
+                  <stop offset="100%" stop-color="#b45309"/>
+                </linearGradient>
+                <!-- Glossy Specular Overlay -->
+                <linearGradient id="glassSheen" x1="0" y1="0" x2="0" y2="1">
+                  <stop offset="0%" stop-color="#ffffff" stop-opacity="0.45"/>
+                  <stop offset="100%" stop-color="#ffffff" stop-opacity="0"/>
+                </linearGradient>
+                <filter id="iconShadow" x="-20%" y="-20%" width="140%" height="140%">
+                  <feDropShadow dx="0" dy="8" stdDeviation="6" flood-color="#000000" flood-opacity="0.55"/>
+                </filter>
+              </defs>
+
+              <!-- 4 Classic Ludo Board Quadrants -->
+              <rect x="0" y="0" width="120" height="120" fill="url(#quadRed)"/>
+              <rect x="120" y="0" width="120" height="120" fill="url(#quadGreen)"/>
+              <rect x="0" y="120" width="120" height="120" fill="url(#quadBlue)"/>
+              <rect x="120" y="120" width="120" height="120" fill="url(#quadYellow)"/>
+
+              <!-- White Cross Track Grid -->
+              <rect x="98" y="0" width="44" height="240" fill="#f8fafc" opacity="0.94"/>
+              <rect x="0" y="98" width="240" height="44" fill="#f8fafc" opacity="0.94"/>
+              <line x1="113" y1="0" x2="113" y2="240" stroke="#cbd5e1" stroke-width="1.5"/>
+              <line x1="127" y1="0" x2="127" y2="240" stroke="#cbd5e1" stroke-width="1.5"/>
+              <line x1="0" y1="113" x2="240" y2="113" stroke="#cbd5e1" stroke-width="1.5"/>
+              <line x1="0" y1="127" x2="240" y2="127" stroke="#cbd5e1" stroke-width="1.5"/>
+
+              <!-- Corner Yard Rings -->
+              <circle cx="50" cy="50" r="33" fill="none" stroke="#991b1b" stroke-width="4" opacity="0.4"/>
+              <circle cx="190" cy="50" r="33" fill="none" stroke="#065f46" stroke-width="4" opacity="0.4"/>
+              <circle cx="50" cy="190" r="33" fill="none" stroke="#1e40af" stroke-width="4" opacity="0.4"/>
+              <circle cx="190" cy="190" r="33" fill="none" stroke="#92400e" stroke-width="4" opacity="0.4"/>
+
+              <!-- 3D Red Glossy Dice -->
+              <g filter="url(#iconShadow)">
+                <rect x="64" y="76" width="112" height="112" rx="26" fill="url(#diceBody)" stroke="#fecaca" stroke-width="2.5"/>
+                <!-- Top Glossy Reflection -->
+                <path d="M78 86 Q120 75 162 86 Q155 106 120 106 Q85 106 78 86 Z" fill="url(#glassSheen)"/>
+                <!-- Crisp White Dice Pips (Face 5) -->
+                <circle cx="94" cy="106" r="10" fill="#ffffff"/>
+                <circle cx="146" cy="106" r="10" fill="#ffffff"/>
+                <circle cx="120" cy="132" r="10" fill="#ffffff"/>
+                <circle cx="94" cy="158" r="10" fill="#ffffff"/>
+                <circle cx="146" cy="158" r="10" fill="#ffffff"/>
+              </g>
+
+              <!-- Royal Jeweled Golden Crown Perched on Dice -->
+              <g filter="url(#iconShadow)" transform="translate(0, -4)">
+                <path d="M74 82 L68 42 L96 60 L120 31 L144 60 L172 42 L166 82 Z" fill="url(#crownGold)" stroke="#fef9c3" stroke-width="2" stroke-linejoin="round"/>
+                <!-- Crown Base Rim -->
+                <rect x="73" y="76" width="94" height="13" rx="6" fill="url(#crownGold)" stroke="#fef08a" stroke-width="1.5"/>
+                <!-- Crown Tip Pearls -->
+                <circle cx="68" cy="40" r="5" fill="#fef9c3"/>
+                <circle cx="120" cy="28" r="6.5" fill="#fef9c3"/>
+                <circle cx="172" cy="40" r="5" fill="#fef9c3"/>
+                <!-- Embedded Royal Gemstones -->
+                <circle cx="96" cy="82.5" r="3.5" fill="#3b82f6"/>
+                <circle cx="120" cy="82.5" r="4.3" fill="#ef4444"/>
+                <circle cx="144" cy="82.5" r="3.5" fill="#10b981"/>
+              </g>
+
+              <!-- Sparkle Stars -->
+              <path d="M43 82 L46 90 L54 93 L46 96 L43 104 L40 96 L32 93 L40 90 Z" fill="#fef9c3"/>
+              <path d="M197 75 L199 81 L205 83 L199 85 L197 91 L195 85 L189 83 L195 81 Z" fill="#fef9c3"/>
+
+              <!-- Royal Emblem Ribbon -->
+              <rect x="34" y="176" width="172" height="44" rx="14" fill="#090718" stroke="#fbbf24" stroke-width="2.5"/>
+              <text x="120" y="196" text-anchor="middle" font-family="Fredoka, sans-serif" font-weight="700" font-size="18" fill="#ffffff" letter-spacing="1.5">LUDO</text>
+              <text x="120" y="213" text-anchor="middle" font-family="Fredoka, sans-serif" font-weight="700" font-size="16" fill="#fbbf24" letter-spacing="2">KING</text>
+            </svg>
+          </div>
+
+          <!-- Version Pill -->
+          <span class="absolute -bottom-3 left-1/2 -translate-x-1/2 px-3.5 py-0.5 rounded-full bg-royal-900 border border-amber-400/70 text-amber-300 text-xs font-bold shadow-lg whitespace-nowrap">
+            v8.5.0 Official
+          </span>
+        </div>
+
+        <!-- Verified Official Badge -->
+        <div class="inline-flex items-center gap-1.5 px-3.5 py-1 rounded-full bg-emerald-500/15 border border-emerald-400/45 text-emerald-300 text-xs sm:text-sm font-semibold mb-3">
+          <svg class="w-4 h-4 text-emerald-400" viewBox="0 0 20 20" fill="currentColor">
+            <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.857-9.809a.75.75 0 00-1.214-.882l-3.483 4.79-1.88-1.88a.75.75 0 10-1.06 1.061l2.5 2.5a.75.75 0 001.137-.089l4-5.5z" clip-rule="evenodd" />
+          </svg>
+          <span>Verified Official</span>
+        </div>
+
+        <!-- Hero Headline & Tagline -->
+        <h1 class="font-display font-bold text-4xl sm:text-6xl tracking-tight text-white mb-3">
+          Ludo <span class="text-gold-gradient">King</span>
+        </h1>
+        <p class="max-w-xl text-base sm:text-xl text-slate-300 font-medium leading-relaxed mb-7">
+          Roll the Royal Dice &amp; Rule the Board! Play Online &amp; Offline with Friends and Family.
+        </p>
+
+        <!-- Quick Stats Grid -->
+        <div class="w-full max-w-2xl grid grid-cols-4 gap-2 sm:gap-4 bg-royal-900/85 backdrop-blur-md border border-white/15 rounded-2xl p-3 sm:p-4 mb-8 shadow-xl">
+          <div class="flex flex-col items-center justify-center border-r border-white/10">
+            <span class="text-base sm:text-xl font-extrabold text-amber-400">4.8 ★</span>
+            <span class="text-[11px] sm:text-xs text-slate-400 font-medium mt-0.5">Rating</span>
+          </div>
+          <div class="flex flex-col items-center justify-center border-r border-white/10">
+            <span class="text-base sm:text-xl font-extrabold text-emerald-400">1B+</span>
+            <span class="text-[11px] sm:text-xs text-slate-400 font-medium mt-0.5">Downloads</span>
+          </div>
+          <div class="flex flex-col items-center justify-center border-r border-white/10">
+            <span class="text-base sm:text-xl font-extrabold text-sky-400">64 MB</span>
+            <span class="text-[11px] sm:text-xs text-slate-400 font-medium mt-0.5">Size</span>
+          </div>
+          <div class="flex flex-col items-center justify-center">
+            <span class="text-base sm:text-xl font-extrabold text-rose-400">v8.5.0</span>
+            <span class="text-[11px] sm:text-xs text-slate-400 font-medium mt-0.5">Version</span>
+          </div>
+        </div>
+
+        <!-- Primary Animated Golden-Emerald Download App (APK) CTA Button -->
+        <div class="w-full sm:w-auto flex flex-col items-center">
+          <button type="button"
+                  onclick="triggerAppDownload()"
+                  class="btn-royal-download animate-pulse-glow relative overflow-hidden w-full sm:w-auto min-w-[290px] sm:min-w-[350px] px-8 py-4 sm:py-5 rounded-2xl text-royal-950 font-display font-bold text-lg sm:text-xl tracking-wide flex items-center justify-center gap-3 cursor-pointer">
+            <!-- Shimmer Light Sweep -->
+            <span class="absolute inset-0 w-1/3 h-full bg-white/40 skew-x-[-20deg] animate-shimmer pointer-events-none"></span>
+
+            <svg class="w-7 h-7 text-royal-950 shrink-0" fill="none" stroke="currentColor" stroke-width="2.6" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M4 16v2a2 2 0 002 2h12a2 2 0 002-2v-2M7 10l5 5m0 0l5-5m-5 5V3" />
+            </svg>
+            <span>Download App (APK)</span>
+          </button>
+
+          <p class="mt-3 text-xs text-slate-400 flex items-center gap-1.5">
+            <span class="inline-block w-2 h-2 rounded-full bg-emerald-400 animate-ping"></span>
+            <span>Instant 1-Click Direct Download • Android 6.0+ • Safe &amp; Verified</span>
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- =====================================================================
+         4 GAME MODE CARDS (ONLINE MULTIPLAYER, PASS & PLAY, COMPUTER, QUICK)
+         ===================================================================== -->
+    <section id="modes" class="py-14 sm:py-20 px-4 sm:px-6 border-t border-white/10 bg-royal-900/40">
+      <div class="max-w-6xl mx-auto">
+        <div class="text-center max-w-2xl mx-auto mb-12">
+          <span class="text-xs font-bold uppercase tracking-widest text-amber-400">4 Classic Ludo Modes</span>
+          <h2 class="font-display font-bold text-3xl sm:text-4xl text-white mt-2">Choose Your Battle Arena</h2>
+          <p class="text-slate-300 text-sm sm:text-base mt-2">
+            Play live with millions online, pass a single phone with friends, or enjoy fast 5-minute matches.
+          </p>
+        </div>
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
+          <!-- Mode 1: Online Multiplayer (Blue Accent) -->
+          <div class="group bg-royal-900/90 border border-blue-500/35 hover:border-blue-400 rounded-3xl p-6 transition-all duration-300 hover:-translate-y-1.5 shadow-lg">
+            <div class="w-14 h-14 rounded-2xl bg-gradient-to-br from-blue-500 to-indigo-600 flex items-center justify-center mb-5 shadow-lg shadow-blue-500/30 group-hover:scale-105 transition-transform">
+              <svg class="w-7 h-7 text-white" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M21 12a9 9 0 01-9 9m9-9a9 9 0 00-9-9m9 9H3m9 9a9 9 0 01-9-9m9 9c1.657 0 3-4.03 3-9s-1.343-9-3-9m0 18c-1.657 0-3-4.03-3-9s1.343-9 3-9m-9 9a9 9 0 019-9" />
+              </svg>
+            </div>
+            <h3 class="font-display font-bold text-xl text-white mb-2">Online Multiplayer</h3>
+            <p class="text-sm text-slate-300 leading-relaxed">
+              Compete in real-time 2-player and 4-player matches against Ludo masters from around the globe.
+            </p>
+          </div>
+
+          <!-- Mode 2: Pass & Play (Green Accent) -->
+          <div class="group bg-royal-900/90 border border-emerald-500/35 hover:border-emerald-400 rounded-3xl p-6 transition-all duration-300 hover:-translate-y-1.5 shadow-lg">
+            <div class="w-14 h-14 rounded-2xl bg-gradient-to-br from-emerald-500 to-teal-600 flex items-center justify-center mb-5 shadow-lg shadow-emerald-500/30 group-hover:scale-105 transition-transform">
+              <svg class="w-7 h-7 text-white" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0z" />
+              </svg>
+            </div>
+            <h3 class="font-display font-bold text-xl text-white mb-2">Pass &amp; Play</h3>
+            <p class="text-sm text-slate-300 leading-relaxed">
+              Play offline with 2 to 6 friends and family members taking turns on the same smartphone.
+            </p>
+          </div>
+
+          <!-- Mode 3: Computer Mode (Red Accent) -->
+          <div class="group bg-royal-900/90 border border-red-500/35 hover:border-red-400 rounded-3xl p-6 transition-all duration-300 hover:-translate-y-1.5 shadow-lg">
+            <div class="w-14 h-14 rounded-2xl bg-gradient-to-br from-red-500 to-rose-600 flex items-center justify-center mb-5 shadow-lg shadow-red-500/30 group-hover:scale-105 transition-transform">
+              <svg class="w-7 h-7 text-white" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+              </svg>
+            </div>
+            <h3 class="font-display font-bold text-xl text-white mb-2">Computer Mode</h3>
+            <p class="text-sm text-slate-300 leading-relaxed">
+              Practice your strategies anytime without an internet connection against smart AI opponents.
+            </p>
+          </div>
+
+          <!-- Mode 4: Private Friends Room (Yellow/Gold Accent) -->
+          <div class="group bg-royal-900/90 border border-amber-500/35 hover:border-amber-400 rounded-3xl p-6 transition-all duration-300 hover:-translate-y-1.5 shadow-lg">
+            <div class="w-14 h-14 rounded-2xl bg-gradient-to-br from-amber-400 to-orange-500 flex items-center justify-center mb-5 shadow-lg shadow-amber-500/30 group-hover:scale-105 transition-transform">
+              <svg class="w-7 h-7 text-royal-950" fill="none" stroke="currentColor" stroke-width="2.3" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M15 7a2 2 0 012 2m4 0a6 6 0 01-7.743 5.743L11 17H9v2H7v2H4a1 1 0 01-1-1v-2.586a1 1 0 01.293-.707l5.964-5.964A6 6 0 1121 9z" />
+              </svg>
+            </div>
+            <h3 class="font-display font-bold text-xl text-white mb-2">Private Friends Room</h3>
+            <p class="text-sm text-slate-300 leading-relaxed">
+              Create a private room code and invite your friends on WhatsApp for custom royal Ludo battles!
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- =====================================================================
+         INTERACTIVE MINI DICE ROLLER & ROYAL BOARD PREVIEW
+         ===================================================================== -->
+    <section id="preview" class="py-14 sm:py-20 px-4 sm:px-6 border-t border-white/10">
+      <div class="max-w-5xl mx-auto">
+        <div class="bg-gradient-to-br from-royal-900 via-royal-800/90 to-royal-900 border border-amber-400/30 rounded-3xl p-6 sm:p-10 shadow-2xl">
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-8 items-center">
+
+            <!-- Left Info -->
+            <div>
+              <span class="inline-block px-3 py-1 rounded-full bg-amber-400/15 border border-amber-400/40 text-amber-300 text-xs font-bold uppercase tracking-wider mb-3">
+                Interactive Mini Preview
+              </span>
+              <h2 class="font-display font-bold text-2xl sm:text-4xl text-white mb-3">
+                Test Your Royal Luck!
+              </h2>
+              <p class="text-slate-300 text-sm sm:text-base leading-relaxed mb-5">
+                Tap the 3D glossy dice to roll and watch your active player token advance across the 4-color board. Roll a <span class="text-amber-300 font-bold">6</span> to unlock a bonus turn!
+              </p>
+
+              <!-- Active Color Turn Selector -->
+              <div class="flex flex-wrap items-center gap-2.5">
+                <span class="text-xs font-semibold text-slate-400 mr-1">Active Player:</span>
+                <button type="button" onclick="setActiveColor('Red', '#ef4444')" class="px-3 py-1.5 rounded-xl bg-red-500/20 hover:bg-red-500/35 border border-red-400/60 text-xs font-bold text-red-200 transition cursor-pointer">Red</button>
+                <button type="button" onclick="setActiveColor('Green', '#10b981')" class="px-3 py-1.5 rounded-xl bg-emerald-500/20 hover:bg-emerald-500/35 border border-emerald-400/60 text-xs font-bold text-emerald-200 transition cursor-pointer">Green</button>
+                <button type="button" onclick="setActiveColor('Yellow', '#f59e0b')" class="px-3 py-1.5 rounded-xl bg-amber-500/20 hover:bg-amber-500/35 border border-amber-400/60 text-xs font-bold text-amber-200 transition cursor-pointer">Yellow</button>
+                <button type="button" onclick="setActiveColor('Blue', '#3b82f6')" class="px-3 py-1.5 rounded-xl bg-blue-500/20 hover:bg-blue-500/35 border border-blue-400/60 text-xs font-bold text-blue-200 transition cursor-pointer">Blue</button>
+              </div>
+            </div>
+
+            <!-- Right Interactive Board + 3D Dice Widget -->
+            <div class="bg-royal-950/90 border border-white/15 rounded-3xl p-6 flex flex-col sm:flex-row items-center justify-between gap-6 shadow-inner">
+              <!-- Mini 4-Quadrant Board -->
+              <div class="relative w-36 h-36 rounded-2xl overflow-hidden grid grid-cols-2 grid-rows-2 border-2 border-amber-400/70 shrink-0 shadow-xl">
+                <div class="bg-red-500/90 flex items-center justify-center p-3">
+                  <div class="w-full h-full rounded-xl bg-white/95 grid grid-cols-2 place-items-center p-1.5">
+                    <span class="w-3 h-3 rounded-full bg-red-600 shadow"></span>
+                    <span class="w-3 h-3 rounded-full bg-red-600 shadow"></span>
+                    <span class="w-3 h-3 rounded-full bg-red-600 shadow"></span>
+                    <span class="w-3 h-3 rounded-full bg-red-600 shadow"></span>
+                  </div>
+                </div>
+                <div class="bg-emerald-500/90 flex items-center justify-center p-3">
+                  <div class="w-full h-full rounded-xl bg-white/95 grid grid-cols-2 place-items-center p-1.5">
+                    <span class="w-3 h-3 rounded-full bg-emerald-600 shadow"></span>
+                    <span class="w-3 h-3 rounded-full bg-emerald-600 shadow"></span>
+                    <span class="w-3 h-3 rounded-full bg-emerald-600 shadow"></span>
+                    <span class="w-3 h-3 rounded-full bg-emerald-600 shadow"></span>
+                  </div>
+                </div>
+                <div class="bg-blue-500/90 flex items-center justify-center p-3">
+                  <div class="w-full h-full rounded-xl bg-white/95 grid grid-cols-2 place-items-center p-1.5">
+                    <span class="w-3 h-3 rounded-full bg-blue-600 shadow"></span>
+                    <span class="w-3 h-3 rounded-full bg-blue-600 shadow"></span>
+                    <span class="w-3 h-3 rounded-full bg-blue-600 shadow"></span>
+                    <span class="w-3 h-3 rounded-full bg-blue-600 shadow"></span>
+                  </div>
+                </div>
+                <div class="bg-amber-400/90 flex items-center justify-center p-3">
+                  <div class="w-full h-full rounded-xl bg-white/95 grid grid-cols-2 place-items-center p-1.5">
+                    <span class="w-3 h-3 rounded-full bg-amber-600 shadow"></span>
+                    <span class="w-3 h-3 rounded-full bg-amber-600 shadow"></span>
+                    <span class="w-3 h-3 rounded-full bg-amber-600 shadow"></span>
+                    <span class="w-3 h-3 rounded-full bg-amber-600 shadow"></span>
+                  </div>
+                </div>
+                <!-- Center Crown Star -->
+                <div class="absolute inset-0 flex items-center justify-center pointer-events-none">
+                  <div class="w-9 h-9 rounded-lg bg-royal-950 border-2 border-amber-400 flex items-center justify-center text-sm shadow-lg">
+                    👑
+                  </div>
+                </div>
+              </div>
+
+              <!-- Interactive 3D Dice Button -->
+              <div class="flex-1 flex flex-col items-center text-center">
+                <span id="activePlayerBadge" class="text-xs font-bold text-red-400 mb-2">Red Player's Turn</span>
+
+                <button type="button"
+                        id="interactiveDiceBtn"
+                        onclick="rollPreviewDice()"
+                        aria-label="Roll 3D Dice"
+                        class="w-20 h-20 rounded-2xl bg-gradient-to-br from-white via-slate-100 to-slate-300 border-2 border-amber-400 shadow-xl flex items-center justify-center p-3 transition-transform duration-200 hover:scale-105 active:scale-95 cursor-pointer">
+                  <!-- Dynamic SVG Dice Pips Container -->
+                  <svg id="diceFaceSvg" class="w-full h-full" viewBox="0 0 60 60" fill="#dc2626">
+                    <circle cx="16" cy="16" r="5.5"/>
+                    <circle cx="44" cy="16" r="5.5"/>
+                    <circle cx="16" cy="30" r="5.5"/>
+                    <circle cx="44" cy="30" r="5.5"/>
+                    <circle cx="16" cy="44" r="5.5"/>
+                    <circle cx="44" cy="44" r="5.5"/>
+                  </svg>
+                </button>
+
+                <span id="diceRollHint" class="text-xs text-amber-300 font-semibold mt-3">Tap Dice to Roll!</span>
+                <span id="rollCounterText" class="text-[11px] text-slate-400 mt-0.5">Total Rolls: 0</span>
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- =====================================================================
+         3-STEP ANDROID APK INSTALLATION GUIDE & SECONDARY DOWNLOAD CTA
+         ===================================================================== -->
+    <section id="install" class="py-14 sm:py-20 px-4 sm:px-6 border-t border-white/10 bg-royal-900/40">
+      <div class="max-w-5xl mx-auto">
+        <div class="text-center max-w-xl mx-auto mb-12">
+          <span class="text-xs font-bold uppercase tracking-widest text-emerald-400">Easy Android Setup</span>
+          <h2 class="font-display font-bold text-3xl sm:text-4xl text-white mt-2">How to Install in 3 Steps</h2>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+          <!-- Step 1 -->
+          <div class="bg-royal-900 border border-white/10 rounded-3xl p-6 text-center shadow-lg">
+            <div class="w-12 h-12 rounded-2xl bg-gradient-to-br from-amber-400 to-amber-600 text-royal-950 font-display font-extrabold text-xl flex items-center justify-center mx-auto mb-4 shadow-md">
+              1
+            </div>
+            <h3 class="font-display font-bold text-lg text-white mb-2">Tap Download App (APK)</h3>
+            <p class="text-sm text-slate-300 leading-relaxed">
+              Click any <span class="text-amber-300 font-semibold">Download App (APK)</span> button on this page to immediately begin downloading <code class="text-xs bg-white/10 px-1.5 py-0.5 rounded">ludo_king.apk</code>.
+            </p>
+          </div>
+
+          <!-- Step 2 -->
+          <div class="bg-royal-900 border border-white/10 rounded-3xl p-6 text-center shadow-lg">
+            <div class="w-12 h-12 rounded-2xl bg-gradient-to-br from-emerald-400 to-emerald-600 text-royal-950 font-display font-extrabold text-xl flex items-center justify-center mx-auto mb-4 shadow-md">
+              2
+            </div>
+            <h3 class="font-display font-bold text-lg text-white mb-2">Allow Unknown Sources</h3>
+            <p class="text-sm text-slate-300 leading-relaxed">
+              Open <code class="text-xs bg-white/10 px-1.5 py-0.5 rounded">ludo_king.apk</code> from your browser's Downloads bar and toggle <span class="text-emerald-300 font-semibold">Allow from this source</span> if prompted.
+            </p>
+          </div>
+
+          <!-- Step 3 -->
+          <div class="bg-royal-900 border border-white/10 rounded-3xl p-6 text-center shadow-lg">
+            <div class="w-12 h-12 rounded-2xl bg-gradient-to-br from-blue-400 to-blue-600 text-royal-950 font-display font-extrabold text-xl flex items-center justify-center mx-auto mb-4 shadow-md">
+              3
+            </div>
+            <h3 class="font-display font-bold text-lg text-white mb-2">Install &amp; Claim Bonus</h3>
+            <p class="text-sm text-slate-300 leading-relaxed">
+              Tap <span class="text-sky-300 font-semibold">Install</span>, open Ludo King from your home screen, and claim your free welcome royal coins!
+            </p>
+          </div>
+        </div>
+
+        <!-- Secondary Bottom Download CTA Banner -->
+        <div class="mt-12 bg-gradient-to-r from-royal-800 via-royal-900 to-royal-800 border border-amber-400/45 rounded-3xl p-7 sm:p-10 text-center shadow-2xl">
+          <h3 class="font-display font-bold text-2xl sm:text-3xl text-white mb-2">
+            Ready to Become the Next <span class="text-amber-400">Ludo King</span>?
+          </h3>
+          <p class="text-sm sm:text-base text-slate-300 max-w-lg mx-auto mb-6">
+            Download the verified v8.5.0 Android APK now and start playing with friends &amp; family in seconds.
+          </p>
+          <button type="button"
+                  onclick="triggerAppDownload()"
+                  class="btn-royal-download inline-flex items-center justify-center gap-3 px-8 py-4 rounded-2xl text-royal-950 font-display font-bold text-lg shadow-xl cursor-pointer">
+            <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M4 16v2a2 2 0 002 2h12a2 2 0 002-2v-2M7 10l5 5m0 0l5-5m-5 5V3" />
+            </svg>
+            <span>Download App (APK) • 64 MB</span>
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <!-- =====================================================================
+         TRUST & SAFETY STRIP
+         ===================================================================== -->
+    <section class="py-6 px-4 sm:px-6 bg-royal-950 border-t border-white/10">
+      <div class="max-w-5xl mx-auto flex flex-wrap items-center justify-center gap-x-8 gap-y-3 text-xs sm:text-sm font-semibold text-slate-300">
+        <div class="flex items-center gap-2">
+          <svg class="w-5 h-5 text-emerald-400" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
+          </svg>
+          <span>100% Safe &amp; Virus Free</span>
+        </div>
+        <span class="hidden sm:inline text-slate-600">•</span>
+        <div class="flex items-center gap-2">
+          <svg class="w-5 h-5 text-amber-400" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M13 10V3L4 14h7v7l9-11h-7z" />
+          </svg>
+          <span>Direct High-Speed APK Link</span>
+        </div>
+        <span class="hidden sm:inline text-slate-600">•</span>
+        <div class="flex items-center gap-2">
+          <svg class="w-5 h-5 text-sky-400" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M12 18h.01M8 21h8a2 2 0 002-2V5a2 2 0 00-2-2H8a2 2 0 00-2 2v14a2 2 0 002 2z" />
+          </svg>
+          <span>Android 6.0 &amp; Above</span>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- =====================================================================
+       FOOTER
+       ===================================================================== -->
+  <footer class="py-8 px-4 sm:px-6 border-t border-white/10 bg-royal-950 text-center text-xs text-slate-400">
+    <div class="max-w-5xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-4">
+      <div class="flex items-center gap-2">
+        <span class="font-display font-bold text-sm text-white">LUDO <span class="text-amber-400">KING</span></span>
+        <span>• Official Release v8.5.0</span>
+      </div>
+      <p>© 2026 Ludo King Official Download Portal. All rights reserved.</p>
+    </div>
+  </footer>
+
+  <!-- =====================================================================
+       STICKY MOBILE BOTTOM DOWNLOAD BAR
+       ===================================================================== -->
+  <div class="fixed bottom-0 inset-x-0 z-40 md:hidden bg-royal-900/95 backdrop-blur-xl border-t border-amber-400/45 px-4 py-3 shadow-2xl">
+    <div class="flex items-center justify-between gap-3">
+      <div class="flex items-center gap-2.5 min-w-0">
+        <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-red-500 via-amber-500 to-emerald-500 p-0.5 shrink-0">
+          <div class="w-full h-full bg-royal-950 rounded-[10px] flex items-center justify-center text-amber-400 font-display font-bold text-sm">
+            👑
+          </div>
+        </div>
+        <div class="truncate">
+          <p class="font-display font-bold text-sm text-white truncate">Ludo King</p>
+          <p class="text-[11px] text-emerald-400 font-medium">v8.5.0 • 64 MB • Free</p>
+        </div>
+      </div>
+
+      <button type="button"
+              onclick="triggerAppDownload()"
+              class="btn-royal-download px-5 py-2.5 rounded-xl text-royal-950 font-display font-bold text-sm shrink-0 flex items-center gap-1.5 shadow-lg cursor-pointer">
+        <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2.6" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M4 16v2a2 2 0 002 2h12a2 2 0 002-2v-2M7 10l5 5m0 0l5-5m-5 5V3" />
+        </svg>
+        <span>Download</span>
+      </button>
+    </div>
+  </div>
+
+  <!-- =====================================================================
+       JAVASCRIPT: DIRECT DROPBOX APK DOWNLOAD + INTERACTIVE DICE ROLLER
+       ===================================================================== -->
+  <script>
+    // Direct Dropbox Usercontent URL (bypasses Dropbox mobile app & triggers instant browser APK download)
+    const APK_DOWNLOAD_URL = "https://dl.dropboxusercontent.com/scl/fi/gg24pimxw82m3xwvbygol/ludo_king.apk?rlkey=wqb5ayrds3dohj7oo7hdsh6r5&st=26qf3e7x&dl=1";
+
+    let toastTimeout = null;
+    let progressInterval = null;
+    let rollCount = 0;
+
+    /**
+     * Immediately triggers a direct browser download of ludo_king.apk
+     * bypassing the Dropbox app, and displays the confirmation toast banner.
+     */
+    function triggerAppDownload() {
+      try {
+        const downloadAnchor = document.createElement('a');
+        downloadAnchor.href = APK_DOWNLOAD_URL;
+        downloadAnchor.setAttribute('download', 'ludo_king.apk');
+        downloadAnchor.rel = 'noopener';
+        downloadAnchor.style.display = 'none';
+
+        document.body.appendChild(downloadAnchor);
+        downloadAnchor.click();
+        document.body.removeChild(downloadAnchor);
+      } catch (err) {
+        window.location.assign(APK_DOWNLOAD_URL);
+      }
+
+      // Show animated download confirmation toast banner & chime
+      showDownloadToast();
+      playRoyalChime();
+    }
+
+    /**
+     * Reveals the download confirmation toast banner and animates the progress bar.
+     */
+    function showDownloadToast() {
+      const toast = document.getElementById('downloadToast');
+      const progressBar = document.getElementById('downloadProgressBar');
+      const statusText = document.getElementById('downloadStatusText');
+
+      if (!toast || !progressBar || !statusText) return;
+
+      clearTimeout(toastTimeout);
+      clearInterval(progressInterval);
+
+      progressBar.style.width = '18%';
+      statusText.textContent = 'Connecting to direct server...';
+
+      toast.classList.remove('opacity-0', '-translate-y-6');
+      toast.classList.add('opacity-100', 'translate-y-0');
+
+      let progress = 18;
+      progressInterval = setInterval(() => {
+        progress += Math.floor(Math.random() * 22) + 14;
+        if (progress >= 100) {
+          progress = 100;
+          progressBar.style.width = '100%';
+          statusText.textContent = 'Download started in browser!';
+          clearInterval(progressInterval);
+        } else {
+          progressBar.style.width = progress + '%';
+          statusText.textContent = `Requesting APK (${progress}%)...`;
+        }
+      }, 280);
+
+      toastTimeout = setTimeout(() => {
+        hideDownloadToast();
+      }, 6500);
+    }
+
+    /**
+     * Smoothly hides the download confirmation toast banner.
+     */
+    function hideDownloadToast() {
+      const toast = document.getElementById('downloadToast');
+      if (!toast) return;
+      toast.classList.remove('opacity-100', 'translate-y-0');
+      toast.classList.add('opacity-0', '-translate-y-6');
+    }
+
+    /**
+     * Plays a pleasant 2-note royal chime via Web Audio API on download click.
+     */
+    function playRoyalChime() {
+      try {
+        const AudioCtx = window.AudioContext || window.webkitAudioContext;
+        if (!AudioCtx) return;
+        const ctx = new AudioCtx();
+        const now = ctx.currentTime;
+
+        const osc = ctx.createOscillator();
+        const gain = ctx.createGain();
+        osc.type = 'triangle';
+        osc.frequency.setValueAtTime(587.33, now);        // D5
+        osc.frequency.setValueAtTime(880.00, now + 0.11); // A5
+
+        gain.gain.setValueAtTime(0.08, now);
+        gain.gain.exponentialRampToValueAtTime(0.001, now + 0.35);
+
+        osc.connect(gain);
+        gain.connect(ctx.destination);
+        osc.start(now);
+        osc.stop(now + 0.36);
+      } catch (e) {
+        // Safe ignore if audio context is restricted
+      }
+    }
+
+    // SVG Pip layouts for dice faces 1 through 6
+    const DICE_PIPS = {
+      1: '<circle cx="30" cy="30" r="6.5"/>',
+      2: '<circle cx="17" cy="17" r="5.5"/><circle cx="43" cy="43" r="5.5"/>',
+      3: '<circle cx="16" cy="16" r="5.5"/><circle cx="30" cy="30" r="5.5"/><circle cx="44" cy="44" r="5.5"/>',
+      4: '<circle cx="17" cy="17" r="5.5"/><circle cx="43" cy="17" r="5.5"/><circle cx="17" cy="43" r="5.5"/><circle cx="43" cy="43" r="5.5"/>',
+      5: '<circle cx="16" cy="16" r="5.5"/><circle cx="44" cy="16" r="5.5"/><circle cx="30" cy="30" r="5.5"/><circle cx="16" cy="44" r="5.5"/><circle cx="44" cy="44" r="5.5"/>',
+      6: '<circle cx="17" cy="15" r="5.2"/><circle cx="43" cy="15" r="5.2"/><circle cx="17" cy="30" r="5.2"/><circle cx="43" cy="30" r="5.2"/><circle cx="17" cy="45" r="5.2"/><circle cx="43" cy="45" r="5.2"/>'
+    };
+
+    /**
+     * Rolls the interactive mini 3D dice and updates the SVG pips and feedback label.
+     */
+    function rollPreviewDice() {
+      const diceBtn = document.getElementById('interactiveDiceBtn');
+      const diceSvg = document.getElementById('diceFaceSvg');
+      const hint = document.getElementById('diceRollHint');
+      const counter = document.getElementById('rollCounterText');
+      if (!diceBtn || !diceSvg) return;
+
+      diceBtn.classList.add('rotate-180', 'scale-110');
+      hint.textContent = 'Rolling...';
+
+      setTimeout(() => {
+        const rolled = Math.floor(Math.random() * 6) + 1;
+        rollCount += 1;
+        diceSvg.innerHTML = DICE_PIPS[rolled];
+        diceBtn.classList.remove('rotate-180', 'scale-110');
+        hint.textContent = rolled === 6 ? '🎉 Rolled 6! Bonus Turn!' : `You rolled a ${rolled}!`;
+        if (counter) counter.textContent = `Total Rolls: ${rollCount}`;
+      }, 220);
+    }
+
+    /**
+     * Switches the active player color and dice pip tint in the mini preview.
+     */
+    function setActiveColor(playerName, hexColor) {
+      const badge = document.getElementById('activePlayerBadge');
+      const diceSvg = document.getElementById('diceFaceSvg');
+      if (badge) {
+        badge.textContent = `${playerName} Player's Turn`;
+        badge.style.color = hexColor;
+      }
+      if (diceSvg) {
+        diceSvg.setAttribute('fill', hexColor);
+      }
+    }
+  </script>
+</body>
+</html>
